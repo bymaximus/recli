@@ -63,13 +63,37 @@ exports.recli = function() {
       } catch (e) {}
     }
     opts = misc.setupOptions(opts, globalSettings, userSettings);
-
-    r.connect({
+	if (globalSettings.user) {
+		opts.user = globalSettings.user;
+	}
+	if (globalSettings.password) {
+		opts.password = globalSettings.password;
+	}
+	if (userSettings.user) {
+		opts.user = userSettings.user;
+	}
+	if (userSettings.password) {
+		opts.password = userSettings.password;
+	}	
+	
+	var dbOpts = {
       host:    opts.host,
-      port:    opts.port,
-      db:      opts.database,
-      authKey: opts.auth
-    }, function(err, conn) {
+      port:    opts.port		
+	};
+	if (opts.database) {
+		dbOpts.db = opts.database;
+	}
+	if (opts.user) {
+		dbOpts.user = opts.user;
+	}	
+	if (opts.password) {
+		dbOpts.password = opts.password;
+	}		
+	if (opts.authKey) {
+		dbOpts.authKey = opts.authKey;
+	}			
+
+    r.connect(dbOpts, function(err, conn) {
       if (err) {
         throw err;
       } else {
